@@ -1,65 +1,51 @@
 import { uniqBy } from 'lodash'
 
-// 7 x 7
-export const puzzleByType = {
-  LEFT:
-    [
-      '......x',
-      '......x',
-      '.......',
-      '.......',
-      '.......',
-      '.......',
-      '...xxxx',
-    ],
-  CENTER: [
-    'x.....x',
-    '.......',
-    '.......',
-    '.......',
-    '.......',
-    '.......',
-    '...xxxx',
-  ],
-}
-
-export const ROWS = 7
+export const ROWS = 8
 export const COLS = 7
+export type puzzleVersion = 'V2' | 'V2Beta' | 'V1'
 
-// 8
 export const items = [
   [
     'x...',
     'xxxx',
   ],
   [
-    'x..',
-    'xxx',
     '..x',
+    'xxx',
+    'x..',
   ],
   [
-    '..xx',
-    'xxx.',
-  ],
-  [
-    'xxxx',
-    '..x.',
+    'xx..',
+    '.xxx',
   ],
   [
     '.xx',
     'xxx',
   ],
   [
-    'xxx',
     'x.x',
-  ],
-  [
-    'xxx',
     'xxx',
   ],
   [
     'x..',
     'x..',
+    'xxx',
+  ],
+  [
+    'xxxx',
+    '....',
+  ],
+  [
+    'x..',
+    'xxx',
+  ],
+  [
+    '.xx',
+    'xx.'
+  ],
+  [
+    '.x.',
+    '.x.',
     'xxx',
   ],
 ]
@@ -90,48 +76,58 @@ const flip = (item: string[]) => {
   return ret.map(v => v.join(''))
 }
 
-// 8 * ? * ['???','???']
-export const itemMasks = items.map(item => {
-  const ret = [
-    item,
-  ]
-  // rotate
-  for (let i = 1; i < 4; ++i) {
-    ret.push(rotate(ret[i - 1]))
-  }
-  for (let i = 4; i < 8; ++i) {
-    ret.push(flip(ret[i - 4]))
-  }
-  return uniqBy(ret, x => x.join('\n'))
-})
+export const getItemDirections = (flipEnable: boolean = false)=>{
+  const itemMasks=getItemMask(flipEnable)
+  const itemDirections = items.map((item, i) => {
+    const masks = [
+      item,
+    ]
+    // rotate
+    for (let i = 1; i < 4; ++i) {
+      masks.push(rotate(masks[i - 1]))
+    }
+    for (let i = 4; i < 8; ++i) {
+      masks.push(flip(masks[i - 4]))
+    }
+    const originMaskString = masks.map(mask => mask.join('\n'))
+    const itemMaskStrings = itemMasks[i].map(mask => mask.join('\n'))
+    return itemMaskStrings.map(itemMaskString => originMaskString.indexOf(itemMaskString))
+  })
+  return itemDirections
+}
+
+export const getItemMask = (flipEnable: boolean = false) => {
+  const itemMasks = items.map(item => {
+    const ret = [
+      item,
+    ]
+    // rotate
+    for (let i = 1; i < 4; ++i) {
+      ret.push(rotate(ret[i - 1]))
+    }
+    if (flipEnable) {
+      for (let i = 4; i < 8; ++i) {
+        ret.push(flip(ret[i - 4]))
+      }
+    }
+    return uniqBy(ret, x => x.join('\n'))
+  })
+  return itemMasks;
+}
 
 // 8 * ?
-export const itemDirections = items.map((item, i) => {
-  const masks = [
-    item,
-  ]
-  // rotate
-  for (let i = 1; i < 4; ++i) {
-    masks.push(rotate(masks[i - 1]))
-  }
-  for (let i = 4; i < 8; ++i) {
-    masks.push(flip(masks[i - 4]))
-  }
-  const originMaskString = masks.map(mask => mask.join('\n'))
-  const itemMaskStrings = itemMasks[i].map(mask => mask.join('\n'))
-  return itemMaskStrings.map(itemMaskString => originMaskString.indexOf(itemMaskString))
-})
 
-console.log(itemMasks)
-console.log(itemDirections)
+export const getFirstXCols = (flipEnable: boolean = false)=>{
+  const itemMasks=getItemMask(flipEnable)
+  const firstXCols = itemMasks.map(masks => masks.map(mask => mask[0].indexOf('x')))
+  return firstXCols;
+}
 
-// 8 * ?
-export const firstXCols = itemMasks.map(masks => masks.map(mask => mask[0].indexOf('x')))
-
-
-export function solve(board: string[][]) {
+export function solve(board: string[][], flipEnable: boolean = false) {
   const ret: ({ index: number, j: number })[][] = []
   const solution: ({ index: number, j: number } | null)[] = items.map(() => null)
+  const itemMasks = getItemMask(flipEnable)
+  const firstXCols = getFirstXCols(flipEnable)
   let count = 0
   const canPlace = (index: number, i: number, j: number) => {
     const row = Math.floor(index / COLS)
