@@ -39,12 +39,12 @@ class SolutionView extends React.PureComponent<{
               key={i}
               className="SolutionViewItem"
               style={{
-                top: row * 50,
-                left: (col - firstXCol) * 50,
-                width: item[0].length * 50,
-                height: item.length * 50,
+                top: row * 40,
+                left: (col - firstXCol) * 40,
+                width: item[0].length * 40,
+                height: item.length * 40,
                 transform: [
-                  `translate3d(${needDiff ? hwDiff * 25 : 0}px, ${needDiff ? hwDiff * -25 : 0}px, 0px)`,
+                  `translate3d(${needDiff ? hwDiff * 20 : 0}px, ${needDiff ? hwDiff * -20 : 0}px, 0px)`,
                   `rotate3d(1, 1, 0, ${Math.floor(direction / 4) * 180}deg)`,
                   `rotate3d(0, 0, 1, -${direction % 4 * 90}deg)`,
                 ].join(' '),

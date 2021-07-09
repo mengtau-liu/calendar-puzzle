@@ -21,7 +21,6 @@ class Calendar extends React.PureComponent<{
 
   render() {
     const { version, month, day, week, onChange } = this.props
-    console.log(version, month, day, week)
     return (
       <div className="Calendar">
         <>

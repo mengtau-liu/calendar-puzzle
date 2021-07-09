@@ -7,8 +7,8 @@ html {
 }
 
 .Container {
-  width: 350px;
-  height: 400px;
+  width: 280px;
+  height: 320px;
   position: relative;
   margin: 10px auto;
 }
@@ -18,11 +18,17 @@ html {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 8px auto;
+  margin: 4px auto;
+}
+
+.Solutions > input {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 4px;
 }
 
 .SolutionItem {
-  padding: 8px 16px;
+  padding: 4px 8px;
   border-radius: 8px;
   margin: 4px;
   font-size: 0.875rem;

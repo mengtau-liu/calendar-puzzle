@@ -59,10 +59,10 @@ export default class App extends React.PureComponent<{}, AppState> {
     const { flipEnable, version, month, day, week, solutions, index } = this.state
     return (
       <div className="App">
-        <h2>
+        <h3>
           Calendar Puzzle Solver v2
-        </h2>
-        <h4>原创设计:天心&nbsp;&nbsp;淘宝店铺:<a href="https://m.tb.cn/h.4DZuXSN?sm=4c6974">萌叔拼图</a ></h4>
+        </h3>
+        <h5>原创设计:天心&nbsp;&nbsp;淘宝店铺:<a href="https://m.tb.cn/h.4DZuXSN?sm=4c6974">萌叔拼图</a ></h5>
         版本：<TypeSwitch version={version} onChange={this.handleTypeChange} />&nbsp;&nbsp;&nbsp;
         <FlipSwitch flipEnable={flipEnable} onChange={this.handleFlipChange} />
         <div className="Container">
@@ -75,12 +75,7 @@ export default class App extends React.PureComponent<{}, AppState> {
         {solutions.length > 0
           ? (
             <div className="Solutions">
-              <input style={{
-                border: "1px solid #ccc",
-                borderRadius: 8,
-                fontSize: 18,
-                margin: 4
-              }} onChange={e => this.setState({ serial: parseInt(e.target.value) })} defaultValue="1"></input>
+              <input onChange={e => this.setState({ serial: parseInt(e.target.value) })} defaultValue="1"></input>
               <div
                 className='SolutionItem selected'
                 onClick={() => {

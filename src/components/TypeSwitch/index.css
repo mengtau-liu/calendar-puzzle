@@ -1,6 +1,6 @@
 .TypeSwitch {
   display: inline-flex;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   margin: 0px auto 0;
   width: auto;
@@ -9,7 +9,7 @@
 .TypeSwitchItem {
   font-size: 0.875rem;
   line-height: 1rem;
-  padding: 8px 16px;
+  padding: 6px 12px;
   background: #f0f0f0;
   cursor: pointer;
   color: #333;
