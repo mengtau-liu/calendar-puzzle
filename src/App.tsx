@@ -45,10 +45,14 @@ export default class App extends React.PureComponent<{}, AppState> {
     serial: 1,
   }
 
-  handleChange = ({ month, day, week }: { month: number, day: number, week: number }) => this.setState(({ version, flipEnable }) => ({
-    month, day, week, solutions: this.solve(version, month, day, week, flipEnable), index: 0,
-  }))
-
+  handleChange = ({ month, day, week }: { month: number, day: number, week: number }) => {
+    const date = new Date()
+    date.setDate(day)
+    date.setMonth(month)
+    this.setState(({ version, flipEnable }) => ({
+      month, day, week: date.getDay(), solutions: this.solve(version, month, day, date.getDay(), flipEnable), index: 0,
+    }))
+  }
   handleTypeChange = (version: puzzleVersion) => this.setState(({ flipEnable, month, day, week }) => ({
     version, solutions: this.solve(version, month, day, week, flipEnable), index: 0,
   }))
