@@ -8,7 +8,7 @@ import TypeSwitch from './components/TypeSwitch'
 import FlipSwitch from './components/FlipSwitch'
 
 type AppState = {
-  flipEnable:boolean,
+  flipEnable: boolean,
   version: puzzleVersion,
   month: number, // 0 - 11
   day: number, // 1 - 31
@@ -19,16 +19,16 @@ type AppState = {
 }
 
 export default class App extends React.PureComponent<{}, AppState> {
-  solve = (version:puzzleVersion,month: number, day: number, week: number, flipEnable:boolean=false) => {
+  solve = (version: puzzleVersion, month: number, day: number, week: number, flipEnable: boolean = false) => {
     const board = problem[version].map((row: string) => row.split(''))
 
     board[Math.floor(month / 6)][month % 6] = 'x'
-    if(version==='V2'){
+    if (version === 'V2') {
       board[Math.floor((day - 1) / 7) + 2][(day - 1) % 7] = 'x'
       board[Math.floor(week / 4) + 6][week % 4 + 3 + Math.floor(week / 4)] = 'x'
     }
-    if (version==='V2Beta'){
-      board[2][week]='x'
+    if (version === 'V2Beta') {
+      board[2][week] = 'x'
       board[Math.floor((day - 1) / 7) + 3][(day - 1) % 7] = 'x'
     }
     return solve(board, flipEnable)
@@ -45,26 +45,26 @@ export default class App extends React.PureComponent<{}, AppState> {
     serial: 1,
   }
 
-  handleChange = ({ month, day, week }: { month: number, day: number, week: number }) => this.setState(({version, flipEnable }) => ({
-    month, day, week, solutions: this.solve(version,month, day, week, flipEnable), index: 0,
+  handleChange = ({ month, day, week }: { month: number, day: number, week: number }) => this.setState(({ version, flipEnable }) => ({
+    month, day, week, solutions: this.solve(version, month, day, week, flipEnable), index: 0,
   }))
 
-  handleTypeChange = (version: puzzleVersion) => this.setState(({ flipEnable,month, day, week }) => ({
+  handleTypeChange = (version: puzzleVersion) => this.setState(({ flipEnable, month, day, week }) => ({
     version, solutions: this.solve(version, month, day, week, flipEnable), index: 0,
   }))
-  handleFlipChange = (flipEnable: boolean) => this.setState(({version, month, day, week }) => ({
+  handleFlipChange = (flipEnable: boolean) => this.setState(({ version, month, day, week }) => ({
     flipEnable, solutions: this.solve(version, month, day, week, flipEnable), index: 0,
   }))
   render() {
-    const { flipEnable,version, month, day, week, solutions, index } = this.state
+    const { flipEnable, version, month, day, week, solutions, index } = this.state
     return (
       <div className="App">
-        <h1>
+        <h2>
           Calendar Puzzle Solver v2
-        </h1>
-        <h3>原创设计:天心&nbsp;&nbsp;淘宝店铺:<a href="https://m.tb.cn/h.4DZuXSN?sm=4c6974">萌叔拼图</a ></h3>
-        版本：<TypeSwitch version={version} onChange={this.handleTypeChange}/>&nbsp;&nbsp;&nbsp;
-        <FlipSwitch flipEnable={flipEnable} onChange={this.handleFlipChange}/>
+        </h2>
+        <h4>原创设计:天心&nbsp;&nbsp;淘宝店铺:<a href="https://m.tb.cn/h.4DZuXSN?sm=4c6974">萌叔拼图</a ></h4>
+        版本：<TypeSwitch version={version} onChange={this.handleTypeChange} />&nbsp;&nbsp;&nbsp;
+        <FlipSwitch flipEnable={flipEnable} onChange={this.handleFlipChange} />
         <div className="Container">
           <Calendar version={version} month={month} day={day} week={week} onChange={this.handleChange} />
           {solutions[index] && <SolutionView flipEnable={flipEnable} solution={solutions[index]} />}
@@ -79,6 +79,7 @@ export default class App extends React.PureComponent<{}, AppState> {
                 border: "1px solid #ccc",
                 borderRadius: 8,
                 fontSize: 18,
+                margin: 4
               }} onChange={e => this.setState({ serial: parseInt(e.target.value) })} defaultValue="1"></input>
               <div
                 className='SolutionItem selected'

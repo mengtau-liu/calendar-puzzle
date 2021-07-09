@@ -1,5 +1,5 @@
 import React from 'react'
-import './index.css'
+import '../TypeSwitch/index.css'
 
 class FlipSwitch extends React.PureComponent<{
   flipEnable: boolean,
@@ -13,7 +13,7 @@ class FlipSwitch extends React.PureComponent<{
           className={`TypeSwitchItem ${flipEnable === false ? 'selected' : ''}`}
           onClick={() => onChange(false)}
         >
-          单面/磨砂
+          磨砂
           </div>
         <div
           className={`TypeSwitchItem ${flipEnable === true ? 'selected' : ''}`}
