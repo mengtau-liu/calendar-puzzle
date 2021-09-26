@@ -2,6 +2,7 @@ import React from 'react'
 import './index.css'
 import { range } from 'lodash'
 import { puzzleVersion } from '../../solver'
+import {problem} from '../../problem'
 
 
 class Calendar extends React.PureComponent<{
@@ -11,16 +12,13 @@ class Calendar extends React.PureComponent<{
   week: number,
   onChange: (params: { month: number, day: number, week: number }) => any
 }> {
-  monthNames = [
-    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC',
-  ]
   weekNames = [
     'Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat',
   ]
 
   render() {
     const { version, month, day, week, onChange } = this.props
+    const monthNames = problem[version].month_names
     return (
       <div className="Calendar">
         <>
@@ -30,7 +28,7 @@ class Calendar extends React.PureComponent<{
               key={m}
               onClick={() => onChange({ month: m, day, week })}
             >
-              {this.monthNames[m]}
+              {monthNames[m]}
             </div>
           ))}
           <div className="item empty" />
@@ -40,7 +38,7 @@ class Calendar extends React.PureComponent<{
               key={m}
               onClick={() => onChange({ month: m, day, week })}
             >
-              {this.monthNames[m]}
+              {monthNames[m]}
             </div>
           ))}
           <div className="item empty" />

@@ -1,54 +1,10 @@
 import { uniqBy } from 'lodash'
+import { problem } from './problem'
 
 export const ROWS = 8
 export const COLS = 7
 export type puzzleVersion = 'V2' | 'V2Beta' | 'V1'
 
-export const items = [
-  [
-    'x...',
-    'xxxx',
-  ],
-  [
-    '..x',
-    'xxx',
-    'x..',
-  ],
-  [
-    'xx..',
-    '.xxx',
-  ],
-  [
-    '.xx',
-    'xxx',
-  ],
-  [
-    'x.x',
-    'xxx',
-  ],
-  [
-    'x..',
-    'x..',
-    'xxx',
-  ],
-  [
-    'xxxx',
-    '....',
-  ],
-  [
-    'x..',
-    'xxx',
-  ],
-  [
-    '.xx',
-    'xx.'
-  ],
-  [
-    '.x.',
-    '.x.',
-    'xxx',
-  ],
-]
 
 const rotate = (item: string[]) => {
   const n = item.length
@@ -76,9 +32,10 @@ const flip = (item: string[]) => {
   return ret.map(v => v.join(''))
 }
 
-export const getItemDirections = (flipEnable: boolean = false)=>{
-  const itemMasks=getItemMask(flipEnable)
-  const itemDirections = items.map((item, i) => {
+export const getItemDirections = (flipEnable: boolean = false, ver: puzzleVersion = "V2") => {
+  const itemMasks = getItemMask(flipEnable, ver)
+
+  const itemDirections = problem[ver].block.map((item, i) => {
     const masks = [
       item,
     ]
@@ -96,8 +53,8 @@ export const getItemDirections = (flipEnable: boolean = false)=>{
   return itemDirections
 }
 
-export const getItemMask = (flipEnable: boolean = false) => {
-  const itemMasks = items.map(item => {
+export const getItemMask = (flipEnable: boolean = false, ver: puzzleVersion = "V2") => {
+  const itemMasks = problem[ver].block.map(item => {
     const ret = [
       item,
     ]
@@ -117,17 +74,17 @@ export const getItemMask = (flipEnable: boolean = false) => {
 
 // 8 * ?
 
-export const getFirstXCols = (flipEnable: boolean = false)=>{
-  const itemMasks=getItemMask(flipEnable)
+export const getFirstXCols = (flipEnable: boolean = false, ver: puzzleVersion = "V2") => {
+  const itemMasks = getItemMask(flipEnable, ver)
   const firstXCols = itemMasks.map(masks => masks.map(mask => mask[0].indexOf('x')))
   return firstXCols;
 }
 
-export function solve(board: string[][], flipEnable: boolean = false) {
+export function solve(board: string[][], flipEnable: boolean = false, ver: puzzleVersion = "V2") {
   const ret: ({ index: number, j: number })[][] = []
-  const solution: ({ index: number, j: number } | null)[] = items.map(() => null)
-  const itemMasks = getItemMask(flipEnable)
-  const firstXCols = getFirstXCols(flipEnable)
+  const solution: ({ index: number, j: number } | null)[] = problem[ver].block.map(() => null)
+  const itemMasks = getItemMask(flipEnable, ver)
+  const firstXCols = getFirstXCols(flipEnable, ver)
   let count = 0
   const canPlace = (index: number, i: number, j: number) => {
     const row = Math.floor(index / COLS)
@@ -136,7 +93,8 @@ export function solve(board: string[][], flipEnable: boolean = false) {
     const n = mask.length
     const m = mask[0].length
     const firstXCol = firstXCols[i][j]
-    if (row + n > ROWS) {
+    const Rows = problem[ver].row
+    if (row + n > Rows) {
       return false
     }
     if (col - firstXCol < 0 || col + m - firstXCol > COLS) {
@@ -189,14 +147,15 @@ export function solve(board: string[][], flipEnable: boolean = false) {
     count += 1
     const row = Math.floor(index / COLS)
     const col = index % COLS
-    if (row >= ROWS) {
+    const Rows = problem[ver].row
+    if (row >= Rows) {
       ret.push(solution.map(s => s!))
       return true
     }
     if (board[row][col] === 'x') {
       return dfs(index + 1)
     }
-    for (let i = 0; i < items.length; ++i) {
+    for (let i = 0; i < problem[ver].block.length; ++i) {
       if (!solution[i]) {
         for (let j = 0; j < itemMasks[i].length; ++j) {
           if (canPlace(index, i, j)) {

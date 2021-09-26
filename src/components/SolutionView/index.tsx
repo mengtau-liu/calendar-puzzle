@@ -1,10 +1,11 @@
 import React from 'react'
 import './index.css'
 import { flatten } from 'lodash'
-import { COLS, getFirstXCols, getItemDirections, items } from '../../solver'
+import { COLS, getFirstXCols, getItemDirections, puzzleVersion } from '../../solver'
+import {problem} from '../../problem'
 
 class SolutionView extends React.PureComponent<{
-  solution: { index: number, j: number }[], flipEnable:boolean,
+  solution: { index: number, j: number }[], flipEnable:boolean, version: puzzleVersion,
 }> {
   colors = [
     '#6B7280',
@@ -20,12 +21,12 @@ class SolutionView extends React.PureComponent<{
   ]
 
   render() {
-    const { solution, flipEnable } = this.props
-    const firstXCols = getFirstXCols(flipEnable)
-    const itemDirections = getItemDirections(flipEnable)
+    const { solution, flipEnable, version } = this.props
+    const firstXCols = getFirstXCols(flipEnable, version)
+    const itemDirections = getItemDirections(flipEnable, version)
     return (
       <div className="SolutionView">
-        {items.map((item, i) => {
+        {problem[version].block.map((item, i) => {
           const { index, j } = solution[i]
           const row = Math.floor(index / COLS)
           const col = index % COLS

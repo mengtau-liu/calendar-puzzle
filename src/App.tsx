@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
 import { puzzleVersion, solve } from './solver'
-import problem from './problem'
+import {problem} from './problem'
 import SolutionView from './components/SolutionView'
 import Calendar from './components/Calendar'
 import TypeSwitch from './components/TypeSwitch'
@@ -20,9 +20,12 @@ type AppState = {
 
 export default class App extends React.PureComponent<{}, AppState> {
   solve = (version: puzzleVersion, month: number, day: number, week: number, flipEnable: boolean = false) => {
-    const board = problem[version].map((row: string) => row.split(''))
+    const board = problem[version].layout.map((row: string) => row.split(''))
 
     board[Math.floor(month / 6)][month % 6] = 'x'
+    if (version === 'V1') {
+      board[Math.floor((day - 1) / 7) + 2][(day - 1) % 7] = 'x'
+    }
     if (version === 'V2') {
       board[Math.floor((day - 1) / 7) + 2][(day - 1) % 7] = 'x'
       board[Math.floor(week / 4) + 6][week % 4 + 3 + Math.floor(week / 4)] = 'x'
@@ -31,7 +34,7 @@ export default class App extends React.PureComponent<{}, AppState> {
       board[2][week] = 'x'
       board[Math.floor((day - 1) / 7) + 3][(day - 1) % 7] = 'x'
     }
-    return solve(board, flipEnable)
+    return solve(board, flipEnable, version)
   }
 
   state: AppState = {
@@ -69,9 +72,9 @@ export default class App extends React.PureComponent<{}, AppState> {
         <h5>原创设计:天心&nbsp;&nbsp;淘宝店铺:<a href="https://m.tb.cn/h.4DZuXSN?sm=4c6974">萌叔拼图</a ></h5>
         版本：<TypeSwitch version={version} onChange={this.handleTypeChange} />&nbsp;&nbsp;&nbsp;
         <FlipSwitch flipEnable={flipEnable} onChange={this.handleFlipChange} />
-        <div className="Container">
+        <div className={version==="V1"?"ContainerV1":"Container"}>
           <Calendar version={version} month={month} day={day} week={week} onChange={this.handleChange} />
-          {solutions[index] && <SolutionView flipEnable={flipEnable} solution={solutions[index]} />}
+          {solutions[index] && <SolutionView flipEnable={flipEnable} solution={solutions[index]} version={version} />}
         </div>
         <div style={{ color: '#333' }}>
           {`${month + 1}月${day}日  解法编号：${index + 1}(共${solutions.length}种)`}

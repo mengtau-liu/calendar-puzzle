@@ -11,17 +11,23 @@ class TypeSwitch extends React.PureComponent<{
     return (
       <div className="TypeSwitch">
         <div
+          className={`TypeSwitchItem ${version === 'V1' ? 'selected' : ''}`}
+          onClick={() => onChange('V1')}
+        >
+          无华
+        </div>
+        <div
           className={`TypeSwitchItem ${version === 'V2' ? 'selected' : ''}`}
           onClick={() => onChange('V2')}
         >
           V2
-          </div>
+        </div>
         <div
           className={`TypeSwitchItem ${version === 'V2Beta' ? 'selected' : ''}`}
           onClick={() => onChange('V2Beta')}
         >
           V2Beta
-          </div>
+        </div>
       </div>
     )
   }
